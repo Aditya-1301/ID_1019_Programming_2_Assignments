@@ -3,7 +3,8 @@ defmodule Derivative do
   @type literal() :: {:num, number()} | {:var, atom()}
 
   @type expr() :: {:add, expr(), expr()} | {:mul, expr(), expr()} |
-  {:div, expr(), expr()} | {:exp, expr(), literal()} |  literal()
+  {:div, expr(), expr()} | {:exp, expr(), literal()} | {:sin, expr()}|
+  {:ln, expr()} | {:cos, expr()} | literal()
 
   def test do
     arg = {:add, {:mul, {:var, :v} , {:num, 5}}, {:num, 3}}
