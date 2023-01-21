@@ -7,11 +7,12 @@ defmodule Derivative do
   {:ln, expr()} | {:cos, expr()} | literal()
 
   def test do
-    arg = {:add, {:mul, {:var, :v} , {:num, 5}}, {:num, 3}}
-    arg2 = {:exp, :v, {:num, 5}}
-    arg3 = {:sin, :v}
-    arg4 = {:ln, :v}
-    arg5 = {:div, {:num, 15}, :v}
+    arg = {:add, {:mul, {:exp, {:var, :v}, {:num, 2}} , {:num, 5}}, {:num, 3}}
+    #{:add, {:mul, {:var, :v} , {:num, 5}}, {:num, 3}}
+    # arg2 = {:exp, :v, {:num, 5}}
+    # arg3 = {:sin, :v}
+    # arg4 = {:ln, :v}
+    # arg5 = {:div, {:num, 15}, :v}
     arg6 = {:mul, {:sqrt, {:var, :v}}, {:num, 5}}
     #{:mul, {:exp, :v, {:div, {:num, 1}, {:num, 4}}}, {:num, 5}}
     d1 = deriv(arg, :v)
@@ -125,6 +126,7 @@ defmodule Derivative do
   def pprint({:num, n}), do: "#{n}"
   def pprint({:var, v}), do: "#{v}"
   def pprint({:mul, {:num, 0}, {:var ,v}}) do end
+  def pprint({:mul, {:var ,v}, {:num, 0}}) do end
   def pprint({:mul, {:num, n}, {:var ,v}}) do "#{pprint(n)}#{pprint(v)}" end
   def pprint({:add, e1, {:num, 0}}), do: "#{pprint(e1)}"
   def pprint({:add, {:num, 0}, e2}), do: "#{pprint(e2)}"
