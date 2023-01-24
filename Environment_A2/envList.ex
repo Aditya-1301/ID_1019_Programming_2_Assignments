@@ -10,7 +10,10 @@ defmodule EnvList do
 
       :io.format("~w\n~w\n",[a1, a2])
       :io.format("~w\n~w\n~w\n",[a3 ,a4, a5])
-      :io.format("#w\n", lookup(a5, :b))
+      #:io.format("~w\n", lookup(a5, :b))
+
+      a5 = remove(a5, :b)
+      :io.format("~w\n",[a5])
 
     end
 
@@ -21,11 +24,13 @@ defmodule EnvList do
     def add([kv | map], key, value) do [kv | add(map, key, value)] end
 
     def lookup([], key) do nil end
-    def lookup([map], key) do map end
     def lookup([ {key, value} | _], key) do {key, value} end
+    def lookup([{_,_} | rest], key) do lookup(rest,key) end
 
-    def remove([],key) do [] end
+    def remove([], key) do nil end
+    def remove([{key, _} | rest], key) do rest end
     def remove([map | {key, _}], key) do map end
     def remove([kv | map], key) do [kv | remove(map, key)] end
+    # def remove([kv | map], key) do [remove(kv, key)|map] end
 
 end
