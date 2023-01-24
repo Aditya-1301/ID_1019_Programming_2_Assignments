@@ -31,6 +31,5 @@ defmodule EnvList do
     def remove([{key, _} | rest], key) do rest end
     def remove([map | {key, _}], key) do map end
     def remove([kv | map], key) do [kv | remove(map, key)] end
-    # def remove([kv | map], key) do [remove(kv, key)|map] end
 
 end
