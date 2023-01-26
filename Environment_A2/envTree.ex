@@ -17,7 +17,7 @@ defmodule EnvTree do
   end
   def add({:node, k, v, left, right}, key, value) do
   #... same thing but instead update the right banch
-  {:node, k, v, left, add(right, key, value)}
+    {:node, k, v, left, add(right, key, value)}
   end
 
   def lookup(nil, key) do
