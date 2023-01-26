@@ -13,37 +13,55 @@ defmodule EnvTree do
   def add({:node, k, v, left, right}, key, value) when key < k do
   #... return a tree that looks like the one we have
   #but where the left branch has been updated ...
-    add(left, key, value)
+    {:node, k, v, add(left, key, value), right}
   end
   def add({:node, k, v, left, right}, key, value) do
   #... same thing but instead update the right banch
-    add(right, key, value)
+  {:node, k, v, left, add(right, key, value)}
+  end
+
+  def lookup(nil, key) do
+    nil
+  end
+  def lookup({:node, key, value, left, right}, key) do
+    {key, value}
+  end
+  def lookup({:node, k, v, left, right}, key) when key < k do
+    lookup(left, key)
+  end
+  def lookup({:node, k, v, left, right}, key) do
+    lookup(right, key)
   end
 
 
 
-  # def remove(nil, _) do
+  def remove(nil, _) do
+    nil
+  end
+  def remove({:node, key, _, nil, right}, key) do
+    right
+  end
+  def remove({:node, key, _, left, nil}, key) do
+    left
+  end
+  def remove({:node, key, _, nil, nil}, key) do
+    nil
+  end
+  def remove({:node, key, _, left, right}, key) do
+    {:node, k1, value } = leftmost(right)
+    {:node, k1, value, left, remove(right, k1)}
+  end
+  def remove({:node, k, v, left, right}, key) when key < k do
+    {:node, k, v, remove(left, key), right}
+  end
+  def remove({:node, k, v, left, right}, key) do
+    {:node, k, v, left, remove(right, key)}
+  end
 
-  # end
-  # def remove({:node, key, _, nil, right}, key) do
-  #   ...
-  # end
-  # def remove({:node, key, _, left, nil}, key) do
-  #   ...
-  # end
-  # def remove({:node, key, _, left, right}, key) do
-  #   ... = leftmost(right) {:node, ..., ..., ..., ...}
-  # end
-  # def remove({:node, k, v, left, right}, key) when key < k do
-  #   {:node, k, v, ..., right}
-  # end
-  # def remove({:node, k, v, left, right}, key) do
-  #   {:node, k, v, left, ...}
-  # end
-  # def leftmost({:node, key, value, nil, rest}) do
-  #   ...
-  # end
-  # def leftmost({:node, k, v, left, right}) do
-  #   ... = leftmost(left) ...
-  # end
+  def leftmost({:node, key, value, nil, _}) do
+		{:node, key, value}
+	end
+	def leftmost({:node, _, _, left, _}) do
+		leftmost(left)
+	end
 end
