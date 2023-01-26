@@ -1,4 +1,7 @@
 defmodule EnvTree do
+
+  def new do nil end
+
   def add(nil, key, value) do
   #... adding a key-value pair to an empty tree ..
     {:node, key, value, nil, nil}
@@ -19,28 +22,28 @@ defmodule EnvTree do
 
 
 
-  def remove(nil, _) do
-    ...
-  end
-  def remove({:node, key, _, nil, right}, key) do
-    ...
-  end
-  def remove({:node, key, _, left, nil}, key) do
-    ...
-  end
-  def remove({:node, key, _, left, right}, key) do
-    ... = leftmost(right) {:node, ..., ..., ..., ...}
-  end
-  def remove({:node, k, v, left, right}, key) when key < k do
-    {:node, k, v, ..., right}
-  end
-  def remove({:node, k, v, left, right}, key) do
-    {:node, k, v, left, ...}
-  end
-  def leftmost({:node, key, value, nil, rest}) do
-    ...
-  end
-  def leftmost({:node, k, v, left, right}) do
-    ... = leftmost(left) ...
-  end
+  # def remove(nil, _) do
+
+  # end
+  # def remove({:node, key, _, nil, right}, key) do
+  #   ...
+  # end
+  # def remove({:node, key, _, left, nil}, key) do
+  #   ...
+  # end
+  # def remove({:node, key, _, left, right}, key) do
+  #   ... = leftmost(right) {:node, ..., ..., ..., ...}
+  # end
+  # def remove({:node, k, v, left, right}, key) when key < k do
+  #   {:node, k, v, ..., right}
+  # end
+  # def remove({:node, k, v, left, right}, key) do
+  #   {:node, k, v, left, ...}
+  # end
+  # def leftmost({:node, key, value, nil, rest}) do
+  #   ...
+  # end
+  # def leftmost({:node, k, v, left, right}) do
+  #   ... = leftmost(left) ...
+  # end
 end
