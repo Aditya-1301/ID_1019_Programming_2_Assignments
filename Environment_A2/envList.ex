@@ -20,7 +20,7 @@ defmodule EnvList do
     def new do [] end
 
     def add([], key, value) do [{key,value}] end
-    def add([kv | {key, _}], key, value) do [kv | {key, value}] end
+    def add([{key, _}|kv], key, value) do [{key, value} | kv] end
     def add([kv | map], key, value) do [kv | add(map, key, value)] end
 
     def lookup([], key) do nil end
