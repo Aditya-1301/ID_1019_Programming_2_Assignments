@@ -53,22 +53,22 @@ defmodule Exp do
 		end
 	end
 
-  def add({:num, n}, {:num, m}, _), do: {:num, n + m}
+  def add({:num, n}, {:num, m}, _) do {:num, n + m} end
   def add({:q, n, m}, {:num, a}, _) do {:q, a*m + n, m} end
   def add({:num, a}, {:q, n, m}, _) do {:q, a*m + n, m} end
   def add(a, b, env) do {:add, eval(a, env), eval(b, env)} end
 
-  def sub({:num, n}, {:num, m}, _), do: {:num, n - m}
+  def sub({:num, n}, {:num, m}, _) do {:num, n - m} end
   def sub({:q, n, m}, {:num, a}, _) do {:q, a*m - n, m} end
   def sub({:num, a}, {:q, n, m}, _) do {:q, a*m - n, m} end
   def sub(a, b, env) do {:sub, eval(a, env), eval(b, env)} end
 
-  def div({:num, n}, {:num, m}, _), do: {:div, n , m}
+  def div({:num, n}, {:num, m}, _) do {:q, n , m} end
   def div({:q, n, m}, {:num, a}, _) do {:q, n, a*m} end
   def div({:num, a}, {:q, n, m}, _) do {:q, a*m, n} end
   def div(a, b, env) do {:div, eval(a, env), eval(b, env)} end
 
-  def mul({:num, n}, {:num, m}, _), do: {:num, n*m}
+  def mul({:num, n}, {:num, m}, _) do {:num, n*m} end
   def mul({:q, n, m}, {:num, a}, _) do {:q, a*n , m} end
   def mul({:num, a}, {:q, n, m}, _) do {:q, a*n, m} end
   def mul(a, b, env) do {:mul, eval(a, env), eval(b, env)} end#
@@ -87,6 +87,5 @@ defmodule Exp do
 		exp = {:mul, {:num, 2}, {:q, 3, 4}}
 		eval1(exp, Map.put(%{}, :x, 10)) |> :io.write
 	end
-
 
 end
