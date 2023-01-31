@@ -1,18 +1,3 @@
-# defmodule Env do
-#   @type value :: any()
-#   @type key :: atom()
-#   @type env :: %{key => value}
-
-#   def new do %{} end
-#   def add(key, value, env) do
-#     env = Map.put(env, key, value)
-#   end
-#   def remove(key, env) do
-#     env = Map.delete(env, key)
-#   end
-
-# end
-
 defmodule Exp do
 
   @type literal() :: {:num, number()} | {:var, atom()} | {:q, number(), number()}
