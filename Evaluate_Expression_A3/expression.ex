@@ -63,6 +63,7 @@ defmodule Exp do
   def sub({:num, a}, {:q, n, m}, _) do {:q, a*m - n, m} end
   def sub(a, b, env) do {:sub, eval(a, env), eval(b, env)} end
 
+  def div({:num, n}, {:num, 1}, _) do {:num, n} end
   def div({:num, n}, {:num, m}, _) do {:q, n , m} end
   def div({:q, n, m}, {:num, a}, _) do {:q, n, a*m} end
   def div({:num, a}, {:q, n, m}, _) do {:q, a*m, n} end
