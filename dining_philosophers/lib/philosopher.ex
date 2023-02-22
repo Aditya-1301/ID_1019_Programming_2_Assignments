@@ -35,11 +35,37 @@ defmodule Philosopher do
     case Chopstick.request(left, 200) do
       :ok ->
         IO.inspect("#{name} has acquired the left chopstick")
+        sleep(250)
         case Chopstick.request(right, 200) do
           :ok ->
             IO.inspect("#{name} has acquired both chopsticks")
             eating(hunger, left, right, name, ctrl)
+          :no ->
+            IO.inspect("#{name} has waited for too long for the chopsticks and now goes back to sleep")
+            Chopstick.return(left)
+            Chopstick.return(right)
+            dreaming(hunger, left, right, name, ctrl)
         end
+      :no ->
+        IO.inspect("#{name} has waited for too long for the chopsticks and now goes back to sleep")
+        Chopstick.return(left)
+        Chopstick.return(right)
+        dreaming(hunger, left, right, name, ctrl)
+    end
+    IO.inspect("#{name} is now waiting with hunger:#{hunger}")
+    case {Chopstick.request(left, 200),Chopstick.request(right)} do
+      {:ok, :ok} ->
+        IO.inspect("#{name} has acquired both chopsticks")
+        eating(hunger, left, right, name, ctrl)
+      {:ok, _} ->
+        IO.inspect("#{name} has acquired the left chopstick")
+        waiting(hunger, left, right, name, ctrl)
+      {_, :ok} ->
+        IO.inspect("#{name} has acquired the right chopstick")
+        waiting(hunger, left, right, name, ctrl)
+      true ->
+        IO.inspect("#{name} has failed to acquire chopsticks")
+        eating(hunger, left, right, name, ctrl)
     end
   end
 end

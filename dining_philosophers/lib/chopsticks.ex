@@ -29,7 +29,9 @@ defmodule Chopstick do
     send(stick, {:request, self()})
     receive do
       :granted -> :ok
-      after timeout -> :no
+      after timeout ->
+        IO.inspect("Timeout")
+        :no
     end
   end
 

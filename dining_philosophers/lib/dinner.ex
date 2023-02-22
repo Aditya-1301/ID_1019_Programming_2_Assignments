@@ -1,7 +1,11 @@
 defmodule Dinner do
-  def start(), do: spawn(fn -> init() end)
 
-  def init() do
+  def start() do
+    t1 = :erlang.timestamp()
+    spawn(fn -> init(t1) end)
+  end
+  
+  def init(t1) do
     c1 = Chopstick.start()
     c2 = Chopstick.start()
     c3 = Chopstick.start()
@@ -18,16 +22,19 @@ defmodule Dinner do
     Philosopher.start(n3, c3, c4, "Simone", ctrl)
     Philosopher.start(n4, c4, c5, "Elisabeth", ctrl)
     Philosopher.start(n5, c5, c1, "Ayn", ctrl)
-    wait(5, [c1, c2, c3, c4, c5])
+    wait(5, [c1, c2, c3, c4, c5], t1)
   end
 
-  def wait(0, chopsticks) do
+  def wait(0, chopsticks, t1) do
     Enum.each(chopsticks, fn(c) -> Chopstick.quit(c) end)
+    t2 = :erlang.timestamp()
+    dif = :timer.now_diff(t2,t1)
+    IO.inspect("Time taken for this seed of the Dining Philosophers Problem: #{div(dif, 1_000_000)}")
   end
-  def wait(n, chopsticks) do
+  def wait(n, chopsticks, t1) do
     receive do
       :done ->
-        wait(n - 1, chopsticks)
+        wait(n - 1, chopsticks, t1)
       :abort ->
         Process.exit(self(), :kill)
     end
