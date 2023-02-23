@@ -4,7 +4,7 @@ defmodule Dinner do
     t1 = :erlang.timestamp()
     spawn(fn -> init(t1) end)
   end
-  
+
   def init(t1) do
     c1 = Chopstick.start()
     c2 = Chopstick.start()
@@ -12,16 +12,36 @@ defmodule Dinner do
     c4 = Chopstick.start()
     c5 = Chopstick.start()
     ctrl = self()
-    n1 = :rand.uniform(15); IO.inspect(n1)
-    n2 = :rand.uniform(15); IO.inspect(n2)
-    n3 = :rand.uniform(15); IO.inspect(n3)
-    n4 = :rand.uniform(15); IO.inspect(n4)
-    n5 = :rand.uniform(15); IO.inspect(n5)
-    Philosopher.start(n1, c1, c2, "Arendt", ctrl)
-    Philosopher.start(n2, c2, c3, "Hypatia", ctrl)
-    Philosopher.start(n3, c3, c4, "Simone", ctrl)
-    Philosopher.start(n4, c4, c5, "Elisabeth", ctrl)
-    Philosopher.start(n5, c5, c1, "Ayn", ctrl)
+    n1 = :rand.uniform(15); IO.inspect("n1: #{n1}")
+    n2 = :rand.uniform(15); IO.inspect("n2: #{n2}")
+    n3 = :rand.uniform(15); IO.inspect("n3: #{n3}")
+    n4 = :rand.uniform(15); IO.inspect("n4: #{n4}")
+    n5 = :rand.uniform(15); IO.inspect("n5: #{n5}")
+
+    # Philosopher.start(n1, c1, c2, "Arendt", ctrl)
+    # Philosopher.start(n2, c2, c3, "Hypatia", ctrl)
+    # Philosopher.start(n3, c3, c4, "Simone", ctrl)
+    # Philosopher.start(n4, c4, c5, "Elisabeth", ctrl)
+    # Philosopher.start(n5, c5, c1, "Ayn", ctrl)
+
+    # Philosopher.start(5, c1, c2, "Arendt", ctrl)
+    # Philosopher.start(5, c2, c3, "Hypatia", ctrl)
+    # Philosopher.start(5, c3, c4, "Simone", ctrl)
+    # Philosopher.start(5, c4, c5, "Elisabeth", ctrl)
+    # Philosopher.start(5, c5, c1, "Ayn", ctrl)
+
+    Asynch.start(n1, c1, c2, "Arendt", ctrl)
+    Asynch.start(n2, c2, c3, "Hypatia", ctrl)
+    Asynch.start(n3, c3, c4, "Simone", ctrl)
+    Asynch.start(n4, c4, c5, "Elisabeth", ctrl)
+    Asynch.start(n5, c5, c1, "Ayn", ctrl)
+
+    # Asynch.start(5, c1, c2, "Arendt", ctrl)
+    # Asynch.start(5, c2, c3, "Hypatia", ctrl)
+    # Asynch.start(5, c3, c4, "Simone", ctrl)
+    # Asynch.start(5, c4, c5, "Elisabeth", ctrl)
+    # Asynch.start(5, c5, c1, "Ayn", ctrl)
+
     wait(5, [c1, c2, c3, c4, c5], t1)
   end
 

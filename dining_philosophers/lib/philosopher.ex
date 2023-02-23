@@ -25,12 +25,38 @@ defmodule Philosopher do
     case hunger do
       0 -> send(ctrl, :done)
       _ ->
-        IO.inspect("#{name} has woken up and is now waiting for her sticks to eat more")
+        IO.inspect("#{name} has woken up and is now waiting for her sticks to eat")
         waiting(hunger,left,right,name,ctrl)
     end
   end
 
   def waiting(hunger, left, right, name, ctrl) do
+    IO.inspect("#{name} is now waiting with hunger:#{hunger}")
+    case {Chopstick.request(left, 200),Chopstick.request(right)} do
+      {:ok, :ok} ->
+        IO.inspect("#{name} has acquired both chopsticks")
+        eating(hunger, left, right, name, ctrl)
+      {:ok, _} ->
+        # IO.inspect("#{name} has acquired the left chopstick")
+        # waiting(hunger, left, right, name, ctrl)
+        IO.inspect("#{name} was unable to acquire both chopsticks(only acquired the left chopstick)")
+        Chopstick.return(left)
+        dreaming(hunger, left, right, name, ctrl)
+      {_, :ok} ->
+        # IO.inspect("#{name} has acquired the right chopstick")
+        # waiting(hunger, left, right, name, ctrl)
+        IO.inspect("#{name} was unable to acquire both chopsticks(only acquired the right chopstick)")
+        Chopstick.return(right)
+        dreaming(hunger, left, right, name, ctrl)
+      _ ->
+        IO.inspect("#{name} has failed to acquire chopsticks")
+        dreaming(hunger, left, right, name, ctrl)
+    end
+  end
+
+  # My first implementation of the waiting function. Change the name of this to waiting
+  # and waiting to waiting1
+  def waiting1(hunger, left, right, name, ctrl) do
     IO.inspect("#{name} is now waiting with hunger:#{hunger}")
     case Chopstick.request(left, 200) do
       :ok ->
@@ -51,21 +77,6 @@ defmodule Philosopher do
         Chopstick.return(left)
         Chopstick.return(right)
         dreaming(hunger, left, right, name, ctrl)
-    end
-    IO.inspect("#{name} is now waiting with hunger:#{hunger}")
-    case {Chopstick.request(left, 200),Chopstick.request(right)} do
-      {:ok, :ok} ->
-        IO.inspect("#{name} has acquired both chopsticks")
-        eating(hunger, left, right, name, ctrl)
-      {:ok, _} ->
-        IO.inspect("#{name} has acquired the left chopstick")
-        waiting(hunger, left, right, name, ctrl)
-      {_, :ok} ->
-        IO.inspect("#{name} has acquired the right chopstick")
-        waiting(hunger, left, right, name, ctrl)
-      true ->
-        IO.inspect("#{name} has failed to acquire chopsticks")
-        eating(hunger, left, right, name, ctrl)
     end
   end
 end

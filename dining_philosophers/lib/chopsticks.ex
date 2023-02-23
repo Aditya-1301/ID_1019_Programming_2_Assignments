@@ -5,14 +5,22 @@ defmodule Chopstick do
 
   def available() do
     receive do
-      {:request, from} -> send(from, :granted); gone()
+      {:request, from} -> send(from, :granted); gone() # Synchronous Available
+      {:request, from, ref} -> send(from, {:ok, ref}); gone(ref) #Async Available
       :quit -> :ok
     end
   end
 
   def gone() do
     receive do
-      :return -> available()
+      :return -> available() # Synchronous Gone
+      :quit -> :ok
+    end
+  end
+
+  def gone(ref) do
+    receive do
+      {:return, ^ref} -> available() # Async Gone
       :quit -> :ok
     end
   end
@@ -35,8 +43,16 @@ defmodule Chopstick do
     end
   end
 
+  def request(stick, from, ref) do
+    send(stick, {:request, from, ref})
+  end
+
   def return(stick) do
     send(stick, :return)
+  end
+
+  def return(stick, ref) do
+    send(stick, {:return, ref})
   end
 
   def quit(stick) do
