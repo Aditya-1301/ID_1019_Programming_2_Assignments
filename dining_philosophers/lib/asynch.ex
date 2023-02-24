@@ -18,7 +18,7 @@ defmodule Asynch do
 
   def async(0, left, right, name, ctrl, ref) do IO.inspect("--###--#{name} has finished eating--###--") end
   def async(hunger, left, right, name, ctrl, ref) do
-    sleep(hunger*100)
+    sleep(0)
     IO.inspect("#{name} wants to eat; hunger at #{hunger}")
     case eat(hunger, left, right, name, ctrl, ref) do
       :timeout -> async(hunger, left, right, name, ctrl, make_ref())
