@@ -69,7 +69,7 @@ defmodule Train do
   end
 
   #Johan Montelius's Solution to making the main/2 function
-  def main([], 0) do
+  def main([], n) do
     {n ,[], []}
   end
   def main([h|t], n) do
