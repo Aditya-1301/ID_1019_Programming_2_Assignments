@@ -13,8 +13,8 @@ defmodule Moves do
             mvd_wgs = Train.take(one, -n)
             {Train.append(main, mvd_wgs), Train.drop(one, -n), two}
           _ ->
-          {0, drop, take} = Train.main(main, n)
-          {drop, Train.append(one, take), two}
+            {0, drop, take} = Train.main(main, n)
+            {drop, Train.append(one, take), two}
         end
       {:two, n} ->
         case n do

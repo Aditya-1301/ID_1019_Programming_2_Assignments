@@ -73,7 +73,7 @@ defmodule Train do
     {n ,[], []}
   end
   def main([h|t], n) do
-    cond main(t,n) do
+    case main(t,n) do
       {0, drop, taken} -> {0, [h|drop], taken}
       {n, drop, taken} -> {n-1, drop, [h|taken]}
     end
