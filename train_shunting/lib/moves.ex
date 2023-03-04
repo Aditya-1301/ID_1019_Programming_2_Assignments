@@ -11,7 +11,7 @@ defmodule Moves do
         cond do
           n < 0 ->
             mvd_wgs = Train.take(one, -n)
-            {Train.append(main, mvd_wgs), Train.drop(one, -n), two}
+            single({:one, n + 1}, {Train.append(main, mvd_wgs), Train.drop(one, -n), two})
           true ->
             {0, drop, take} = Train.main(main, n)
             {drop, Train.append(one, take), two}
@@ -20,7 +20,7 @@ defmodule Moves do
         cond do
           n < 0 ->
             mvd_wgs = Train.take(two, -n)
-            {Train.append(main, mvd_wgs), one, Train.drop(two, -n)}
+            single({:two, n + 1}, {Train.append(main, mvd_wgs), one, Train.drop(two, -n)})
           true ->
             {0, drop, take} = Train.main(main, n)
             {drop, one, Train.append(two, take)}
