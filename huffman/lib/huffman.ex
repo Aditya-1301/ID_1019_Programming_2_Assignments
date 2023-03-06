@@ -1,15 +1,26 @@
 defmodule Huffman do
 
+  def sample do
+    'the quick brown fox jumps over the lazy dog
+    this is a sample text that we will use when we build
+    up a table we will only handle lower case letters and
+    no punctuation symbols the frequency will of course not
+    represent english but it is probably not that far off'
+  end
+
+  def text() do
+    'this is something that we should encode'
+  end
+
   def test do
     file = "lib\\sample.txt"
     f = getSample(file); #IO.inspect(f)
     t = tree(f); #IO.inspect(t)
     et = encode_table(t); #IO.inspect(et)
     dt = decode(et)
-    e_text = encode_text('Trello', et, [])
-    dt = decode(e_text, dt) |> to_string() ; #IO.inspect(dt)
+    e_text = encode_text(text(), et, [])
+    d_text = decode(e_text, dt) #; #IO.inspect(dt)
   end
-
 
   #################################################################
 
@@ -70,7 +81,7 @@ defmodule Huffman do
 
   #################################################################
 
-  ###########################################// encode_table\DECODE TABLE
+  ##################################################// ENCODE TABLE
 
   #################################################################
 
@@ -85,11 +96,6 @@ defmodule Huffman do
     Map.put(table, char, Enum.reverse(code))
   end
 
-  def encode(text, table) do
-		Enum.map(text, fn(x)-> Map.get(table, x) end)
-		|> List.flatten()
-	end
-
   def encode_text([], _, acc) do acc end
   def encode_text([head|rest], table, acc) do
     if(Map.get(table, head)!=nil) do
@@ -100,33 +106,18 @@ defmodule Huffman do
     end
   end
 
-  # def decode_table(map) do
-	# 	Map.to_list(map)
-	# 	|> Enum.reduce(Map.new(), fn({key, value}, acc)-> Map.put(acc, value, key) end)
-	# end
+  #################################################################
 
-  # def decode(list, table) do
-	# 	decode(list, table, '', '')
-	# 	|> Enum.reverse()
-	# end
+  ##################################################// DECODE TABLE
 
-	# def decode([], table, result, key) do result end
-	# def decode([head|rest], table, result, key) do
-	# 	key = key ++ [head]
-	# 	temp = Map.get(table, key)
-	# 	if temp != nil do
-	# 		decode(rest, table, [temp]++result, '')
-	# 	else
-	# 		decode(rest, table, result, key)
-	# 	end
-	# end
+  #################################################################
 
   def decode(table) do
     Map.new(table, fn {key, value} -> {value, key} end)
   end
 
   def decode(bits, table) do
-    decode(bits, table, '', '') |> Enum.reverse()
+    decode(bits, table, '', '')
   end
 
   def decode([], _, _, result) do result end
@@ -134,14 +125,27 @@ defmodule Huffman do
     key = key ++ [head]
     temp = Map.get(table, key)
     if temp != nil do
-      decode(rest, table, '' , [temp] ++ result)
+      decode(rest, table, '' , result ++ [temp])
     else
       decode(rest, table, key, result)
     end
   end
 
   #################################################################
+
+  ##################################################// BENCHMARKING
+
+  #################################################################
+
+
 end
+
+###################################################################
 
 
 ## Huffman tree -> Hello : %{5, ["L", %{3, ["O", %{2, ["H", "E"]}]}]}
+
+# def encode(text, table) do
+# 	Enum.map(text, fn(x)-> Map.get(table, x) end)
+# 	|> List.flatten()
+# end
