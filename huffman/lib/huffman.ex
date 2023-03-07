@@ -18,7 +18,7 @@ defmodule Huffman do
     t = tree(f); #IO.inspect(t)
     et = encode_table(t); #IO.inspect(et)
     dt = decode(et)
-    e_text = encode_text(text(), et, [])
+    e_text = encode_text(sample(), et, [])
     d_text = decode(e_text, dt) #; #IO.inspect(dt)
   end
 
@@ -55,8 +55,9 @@ defmodule Huffman do
 
   #################################################################
 
-  def tree(freq)do
-    freq_list_sorted = Enum.into(freq, []) |> Enum.sort(fn({_, f1}, {_, f2}) -> f1 <= f2 end)
+  def tree(text)do
+    f = freq(text)
+    freq_list_sorted = Enum.into(f, []) |> Enum.sort(fn({_, f1}, {_, f2}) -> f1 <= f2 end)
     # IO.inspect(freq_list_sorted)
     huffman_tree(freq_list_sorted)
   end
@@ -137,6 +138,54 @@ defmodule Huffman do
 
   #################################################################
 
+  def bench(n) do
+    file = "lib\\sample1.txt"
+    {text, b} = read(file, n)
+    #IO.inspect(text)
+    c = length(text)
+    {tree, t2} = time(fn -> tree(text) end)
+    #IO.inspect(tree)
+    {encode, t3} = time(fn -> encode_table(tree) end)
+    #IO.inspect(encode)
+    s = map_size(encode)
+    {dec, _} = time(fn -> decode(encode) end)
+    #IO.inspect(dec)
+    {encoded, t5} = time(fn -> encode_text(text, encode, []) end)
+    IO.inspect(encoded)
+    e = div(length(encoded), 8)
+    r = Float.round(e / b, 3)
+    {_, t6} = time(fn -> decode(encoded, dec) end)
+
+    IO.puts("text of #{c} characters")
+    IO.puts("tree built in #{t2} ms")
+    IO.puts("table of size #{s} in #{t3} ms")
+    IO.puts("encoded in #{t5} ms")
+    IO.puts("decoded in #{t6} ms")
+    IO.puts("source #{b} bytes, encoded #{e} bytes, compression #{r}")
+  end
+
+  # Measure the execution time of a function.
+  def time(func) do
+    initial = Time.utc_now()
+    result = func.()
+    final = Time.utc_now()
+    {result, Time.diff(final, initial, :microsecond) / 1000}
+  end
+
+ # Get a suitable chunk of text to encode.
+  def read(file, n) do
+   {:ok, fd} = File.open(file, [:read, :utf8])
+    binary = IO.read(fd, n)
+    File.close(fd)
+
+    length = byte_size(binary)
+    case :unicode.characters_to_list(binary, :utf8) do
+      {:incomplete, chars, rest} ->
+        {chars, length - byte_size(rest)}
+      chars ->
+        {chars, length}
+    end
+  end
 
 end
 
