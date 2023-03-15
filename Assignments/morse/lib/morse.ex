@@ -16,13 +16,9 @@ defmodule Morse do
     IO.inspect(decode(c3))
   end
 
-  def encode([], _, code) do code end
+  def encode([], _, code) do Enum.reverse(code) end
   def encode([text|rest], map, code) do
-    case Map.get(map, text) do
-      nil -> ""
-      char -> code = code ++ char
-    end
-    code = code ++ [Map.get(map, text)]
+    code = [Map.get(map, text)] ++ code
     encode(rest, map, code)
   end
 
