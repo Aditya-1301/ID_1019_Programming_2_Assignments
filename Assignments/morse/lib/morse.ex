@@ -28,9 +28,6 @@ defmodule Morse do
     encoded_string(rest, acc)
   end
 
-  def decode_table(table) do
-    Map.new(table, fn {key, value} -> {value, key} end)
-  end
   def decode(code) do
     tree = morse()
     decode(code, tree)
